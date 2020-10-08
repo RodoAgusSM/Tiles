@@ -1,0 +1,717 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package interfaz;
+
+import dominio.Ficha;
+import dominio.Sistema;
+import dominio.Tablero;
+import java.awt.Color;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+/**
+ *
+ * @author Rodo
+ */
+public class TableroJ extends javax.swing.JFrame {
+
+    Sistema miSistema;
+
+    private JButton[][] botones;
+    private int i1;
+    private int j1;
+    private int i2;
+    private int j2;
+    private int z1;
+    private int z2;
+    private boolean turno = true;
+    private MenuPrincipal menu;
+
+    public TableroJ(Sistema miModelo, MenuPrincipal menu) {
+        initComponents();
+        this.menu = menu;
+        menu.setEnabled(false);
+        i1 = -1;
+        i2 = -1;
+        j1 = -1;
+        j2 = -1;
+        z1 = -1;
+        z2 = -1;
+        miSistema = miModelo;
+        int dimension1 = miSistema.partidaActual().getTablero().getTableroBaldosas().length;
+        int dimension2 = miSistema.partidaActual().getTablero().getTableroBaldosas()[0].length;
+        tableroJuego.setLayout(new GridLayout(dimension1, dimension2));
+        botones = new JButton[dimension1][dimension2];
+        int anchoTotal = this.getWidth();
+        int altoTotal = this.getHeight();
+        int anchoDeCasilla = anchoTotal / dimension2;
+        int altoDeCasilla = altoTotal / dimension1;
+        for (int j = 0; j < dimension2; j++) {
+            botones[0][j] = new JButton();
+            tableroJuego.add(botones[0][j]);
+            botones[0][j].setText(j + "");
+            botones[0][j].setBackground(Color.BLUE);
+            botones[0][j].setEnabled(false);
+        }
+        Tablero tab = miSistema.partidaActual().getTablero();
+        for (int i = 1; i < dimension1; i++) {
+            for (int j = 0; j < dimension2; j++) {
+                botones[0][0].setText("");
+                JButton jButton = new JButton();
+                jButton.setBounds(anchoTotal, altoTotal, anchoDeCasilla, altoDeCasilla);
+                jButton.addActionListener(new ListenerBoton(i, j, this));
+                tableroJuego.add(jButton);
+                botones[i][j] = jButton;
+                if (tab.hayBaldosa(i, j)) {
+                    botones[i][j].setBackground(Color.GRAY);
+                    botones[i][j].setBorder(BorderFactory.createLineBorder(Color.GRAY));
+                } else {
+                    botones[i][j].setBackground(Color.YELLOW);
+                    botones[i][j].setBorder(BorderFactory.createLineBorder(Color.GRAY));
+                }
+                if (j == 0) {
+                    botones[0][j].setVisible(false);
+                }
+                if (j == 0) {
+                    botones[i][0].setText((char) (i + 64) + "");
+                    botones[i][0].setBackground(Color.BLUE);
+                    botones[i][0].setEnabled(false);
+                }
+                if (tab.hayFicha(i, j)) {
+                    Ficha ficha1 = tab.getTableroFichas()[i][j];
+                    if (ficha1.getLetra().contains("B")) {
+                        ficha1.setC(Color.WHITE);
+                        botones[i][j].setBackground(ficha1.getC());
+
+                    } else {
+                        if (ficha1.getLetra().contains("R")) {
+                            ficha1.setC(Color.RED);
+                            botones[i][j].setBackground(ficha1.getC());
+                        }
+                    }
+                }
+            }
+        }
+        sinJugada.setSelected(true);
+        jLabelTurno.setText("Turno de: " + miSistema.partidaActual().getJugador1().getAlias());
+        this.pack();
+    }
+
+    public int getI1() {
+        return i1;
+    }
+
+    public void setI1(int unI1) {
+        this.i1 = unI1;
+    }
+
+    public int getJ1() {
+        return j1;
+    }
+
+    public void setJ1(int unJ1) {
+        this.j1 = unJ1;
+    }
+
+    public int getI2() {
+        return i2;
+    }
+
+    public void setI2(int unI2) {
+        this.i2 = unI2;
+    }
+
+    public int getJ2() {
+        return j2;
+    }
+
+    public void setJ2(int unJ2) {
+        this.j2 = unJ2;
+    }
+
+    public int getZ1() {
+        return z1;
+    }
+
+    public void setZ1(int unZ1) {
+        this.z1 = unZ1;
+    }
+
+    public int getZ2() {
+        return z2;
+    }
+
+    public void setZ2(int unZ2) {
+        this.z2 = unZ2;
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        tableroJuego = new javax.swing.JPanel();
+        jLabelTurno = new javax.swing.JLabel();
+        sinJugada = new javax.swing.JRadioButton();
+        moverBaldosa = new javax.swing.JRadioButton();
+        moverFicha = new javax.swing.JRadioButton();
+        saltarFicha = new javax.swing.JRadioButton();
+        jButtonIconoNormal = new javax.swing.JButton();
+        jButtonIconoInvertido = new javax.swing.JButton();
+        btnRendirse = new javax.swing.JButton();
+        btnReiniciar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(1300, 800));
+        setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
+        getContentPane().setLayout(null);
+
+        tableroJuego.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout tableroJuegoLayout = new javax.swing.GroupLayout(tableroJuego);
+        tableroJuego.setLayout(tableroJuegoLayout);
+        tableroJuegoLayout.setHorizontalGroup(
+            tableroJuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 830, Short.MAX_VALUE)
+        );
+        tableroJuegoLayout.setVerticalGroup(
+            tableroJuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 620, Short.MAX_VALUE)
+        );
+
+        getContentPane().add(tableroJuego);
+        tableroJuego.setBounds(40, 40, 830, 620);
+
+        jLabelTurno.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabelTurno.setForeground(new java.awt.Color(255, 255, 255));
+        getContentPane().add(jLabelTurno);
+        jLabelTurno.setBounds(910, 50, 250, 30);
+
+        sinJugada.setBackground(new java.awt.Color(0, 0, 0));
+        buttonGroup1.add(sinJugada);
+        sinJugada.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        sinJugada.setForeground(new java.awt.Color(255, 255, 255));
+        sinJugada.setText("Sin Jugada");
+        getContentPane().add(sinJugada);
+        sinJugada.setBounds(910, 110, 160, 35);
+
+        moverBaldosa.setBackground(new java.awt.Color(0, 0, 0));
+        buttonGroup1.add(moverBaldosa);
+        moverBaldosa.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        moverBaldosa.setForeground(new java.awt.Color(255, 255, 255));
+        moverBaldosa.setText("Mover Baldosa");
+        getContentPane().add(moverBaldosa);
+        moverBaldosa.setBounds(1100, 110, 160, 35);
+
+        moverFicha.setBackground(new java.awt.Color(0, 0, 0));
+        buttonGroup1.add(moverFicha);
+        moverFicha.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        moverFicha.setForeground(new java.awt.Color(255, 255, 255));
+        moverFicha.setText("Mover Ficha");
+        getContentPane().add(moverFicha);
+        moverFicha.setBounds(910, 160, 160, 35);
+
+        saltarFicha.setBackground(new java.awt.Color(0, 0, 0));
+        buttonGroup1.add(saltarFicha);
+        saltarFicha.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        saltarFicha.setForeground(new java.awt.Color(255, 255, 255));
+        saltarFicha.setText("Saltar Ficha");
+        getContentPane().add(saltarFicha);
+        saltarFicha.setBounds(1100, 160, 160, 35);
+
+        jButtonIconoNormal.setBackground(new java.awt.Color(51, 153, 0));
+        jButtonIconoNormal.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jButtonIconoNormal.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonIconoNormal.setText("Cambiar icono ficha normal");
+        jButtonIconoNormal.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jButtonIconoNormal.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jButtonIconoNormal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonIconoNormalActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButtonIconoNormal);
+        jButtonIconoNormal.setBounds(910, 230, 290, 60);
+
+        jButtonIconoInvertido.setBackground(new java.awt.Color(204, 0, 51));
+        jButtonIconoInvertido.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jButtonIconoInvertido.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonIconoInvertido.setText("Cambiar icono de ficha invertida");
+        jButtonIconoInvertido.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jButtonIconoInvertido.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jButtonIconoInvertido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonIconoInvertidoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButtonIconoInvertido);
+        jButtonIconoInvertido.setBounds(910, 350, 295, 60);
+
+        btnRendirse.setBackground(new java.awt.Color(255, 102, 0));
+        btnRendirse.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        btnRendirse.setForeground(new java.awt.Color(255, 255, 255));
+        btnRendirse.setText("Rendirse");
+        btnRendirse.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnRendirse.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnRendirse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRendirseActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnRendirse);
+        btnRendirse.setBounds(910, 470, 290, 60);
+
+        btnReiniciar.setBackground(new java.awt.Color(51, 0, 204));
+        btnReiniciar.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        btnReiniciar.setForeground(new java.awt.Color(255, 255, 255));
+        btnReiniciar.setText("Reiniciar");
+        btnReiniciar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnReiniciar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnReiniciar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReiniciarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnReiniciar);
+        btnReiniciar.setBounds(910, 590, 290, 60);
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/fondoTablerosJ.jpg"))); // NOI18N
+        jLabel1.setText("jLabel1");
+        getContentPane().add(jLabel1);
+        jLabel1.setBounds(0, 0, 1480, 850);
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jButtonIconoNormalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIconoNormalActionPerformed
+        ImageIcon icono = this.selectorImagen();
+        if (icono != null) {
+            int dimension1 = miSistema.partidaActual().getTablero().getTableroBaldosas().length;
+            int dimension2 = miSistema.partidaActual().getTablero().getTableroBaldosas()[0].length;
+            int anchoTotal = this.getWidth();
+            int altoTotal = this.getHeight();
+            int anchoDeCasilla = anchoTotal / dimension2;
+            int altoDeCasilla = altoTotal / dimension1;
+            ImageIcon escalar = new ImageIcon(icono.getImage().getScaledInstance(anchoDeCasilla, altoDeCasilla, java.awt.Image.SCALE_DEFAULT));
+            miSistema.cambiarIconoNormal(escalar);
+            actualizarTablero(miSistema);
+        }
+    }//GEN-LAST:event_jButtonIconoNormalActionPerformed
+
+    private void jButtonIconoInvertidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIconoInvertidoActionPerformed
+        ImageIcon icono = this.selectorImagen();
+        if (icono != null) {
+            int dimension1 = miSistema.partidaActual().getTablero().getTableroBaldosas().length;
+            int dimension2 = miSistema.partidaActual().getTablero().getTableroBaldosas()[0].length;
+            int anchoTotal = this.getWidth();
+            int altoTotal = this.getHeight();
+            int anchoDeCasilla = anchoTotal / dimension2;
+            int altoDeCasilla = altoTotal / dimension1;
+            ImageIcon escalar = new ImageIcon(icono.getImage().getScaledInstance(anchoDeCasilla, altoDeCasilla, java.awt.Image.SCALE_DEFAULT));
+            miSistema.cambiarIconoInvertido(escalar);
+            actualizarTablero(miSistema);
+        }
+    }//GEN-LAST:event_jButtonIconoInvertidoActionPerformed
+
+    private void btnRendirseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRendirseActionPerformed
+        if (turno) {
+            JOptionPane.showMessageDialog(this, " El jugador " + miSistema.partidaActual().getJugador2().getAlias() + " es el ganador!");
+            miSistema.partidaActual().partidasGanadas(miSistema.partidaActual().getJugador1(), miSistema.partidaActual().getJugador2());
+        } else {
+            JOptionPane.showMessageDialog(this, " El jugador " + miSistema.partidaActual().getJugador1().getAlias() + " es el ganador!");
+            miSistema.partidaActual().partidasGanadas(miSistema.partidaActual().getJugador2(), miSistema.partidaActual().getJugador1());
+        }
+        miSistema.partidaActual().partidasJugadas(miSistema.partidaActual().getJugador1(), miSistema.partidaActual().getJugador2());
+        menu.setEnabled(true);
+        this.dispose();
+    }//GEN-LAST:event_btnRendirseActionPerformed
+
+    private void btnReiniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReiniciarActionPerformed
+        miSistema.reiniciar();
+        TableroJ unTJ = new TableroJ(miSistema, menu);
+        unTJ.setLocationRelativeTo(null);
+        unTJ.pack();
+        unTJ.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnReiniciarActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        if (turno) {
+            JOptionPane.showMessageDialog(this, "¡El jugador " + miSistema.partidaActual().getJugador2().getAlias() + " es el ganador!");
+            miSistema.partidaActual().partidasGanadas(miSistema.partidaActual().getJugador1(), miSistema.partidaActual().getJugador2());
+            miSistema.partidaActual().partidasJugadas(miSistema.partidaActual().getJugador1(), miSistema.partidaActual().getJugador2());
+        } else {
+            JOptionPane.showMessageDialog(this, "¡El jugador " + miSistema.partidaActual().getJugador1().getAlias() + " es el ganador!");
+            miSistema.partidaActual().partidasGanadas(miSistema.partidaActual().getJugador2(), miSistema.partidaActual().getJugador1());
+            miSistema.partidaActual().partidasJugadas(miSistema.partidaActual().getJugador1(), miSistema.partidaActual().getJugador2());
+        }
+        menu.setEnabled(true);
+        this.dispose();
+    }//GEN-LAST:event_formWindowClosing
+    public ImageIcon selectorImagen() {
+        JFileChooser jF1 = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("jpg", "JPG");
+        jF1.setFileFilter(filter);
+        jF1.showOpenDialog(this);
+        try {
+            String path = jF1.getSelectedFile().getAbsolutePath();
+            ImageIcon imagen = new ImageIcon(path);
+            return imagen;
+        } catch (NullPointerException ex) {
+            return null;
+        }
+    }
+
+    public boolean permitirSeleccion() {
+        return !sinJugada.isSelected();
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnReiniciar;
+    private javax.swing.JButton btnRendirse;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JButton jButtonIconoInvertido;
+    private javax.swing.JButton jButtonIconoNormal;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabelTurno;
+    private javax.swing.JRadioButton moverBaldosa;
+    private javax.swing.JRadioButton moverFicha;
+    private javax.swing.JRadioButton saltarFicha;
+    private javax.swing.JRadioButton sinJugada;
+    private javax.swing.JPanel tableroJuego;
+    // End of variables declaration//GEN-END:variables
+private class ListenerBoton implements ActionListener {
+
+        private int x;
+        private int y;
+        private TableroJ tablero;
+        private int largo = miSistema.partidaActual().getTablero().getTableroBaldosas().length;
+        private int ancho = miSistema.partidaActual().getTablero().getTableroBaldosas()[0].length;
+        private boolean valSaltoGanado;
+
+        public ListenerBoton(int filaO, int columnO, TableroJ tablero) {
+
+            x = filaO;
+            y = columnO;
+            this.tablero = tablero;
+
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            clickBoton(x, y, tablero);
+        }
+
+        private void clickBoton(int f, int c, TableroJ tablero) {
+            String mensaje = "";
+            boolean error = false;
+            boolean mover = false;
+            boolean habilitado = false;
+            if (tablero.permitirSeleccion()) {
+                if (tablero.getI1() == -1) {
+                    tablero.setI1(f);
+                    tablero.setI2(c);
+                    this.habilitarBotones(habilitado);
+                    botones[tablero.getI1()][tablero.getI2()].setText(">>O<<");
+                } else {
+                    if (tablero.getJ1() == -1) {
+                        tablero.setJ1(f);
+                        tablero.setJ2(c);
+                        botones[tablero.getI1()][tablero.getI2()].setText("");
+                        botones[tablero.getI1()][tablero.getI2()].setText(">>O<<");
+                        mover = moverFicha.isSelected() || saltarFicha.isSelected();
+                    } else {
+                        if (tablero.getZ1() == -1) {
+                            tablero.setZ1(f);
+                            tablero.setZ2(c);
+                            botones[tablero.getI1()][tablero.getI2()].setText("");
+                            mover = moverBaldosa.isSelected();
+                        }
+                    }
+                }
+                habilitado = true;
+                if (mover) {
+                    botones[tablero.getI1()][tablero.getI2()].setText("");
+                    if (turno) {
+                        jLabelTurno.setText("Turno de: " + miSistema.partidaActual().getJugador1().getAlias());
+                        miSistema.partidaActual().setJugadorJugando(miSistema.partidaActual().getJugador1());
+                        miSistema.partidaActual().setJugadorEsperando(miSistema.partidaActual().getJugador2());
+                    } else {
+                        jLabelTurno.setText("Turno de: " + miSistema.partidaActual().getJugador2().getAlias());
+                        miSistema.partidaActual().setJugadorJugando(miSistema.partidaActual().getJugador1());
+                        miSistema.partidaActual().setJugadorEsperando(miSistema.partidaActual().getJugador2());
+                    }
+                    if (this.tablero.moverFicha.isSelected()) {
+                        if (miSistema.partidaActual().getTablero().hayBaldosa(tablero.getI1(), tablero.getI2())) {
+                            if (miSistema.partidaActual().getTablero().hayFicha(tablero.getI1(), tablero.getI2())) {
+                                Ficha ficha = miSistema.partidaActual().getTablero().getTableroFichas()[tablero.getI1()][tablero.getI2()];
+                                if (miSistema.fichaCoincideConJugador(ficha)) {
+                                    miSistema.partidaActual().getJugadorJugando().setFicha(ficha);
+                                    try {
+                                        miSistema.moverFicha(tablero.getI1(), tablero.getI2(), tablero.getJ1(), tablero.getJ2());
+                                        botones[tablero.getI1()][tablero.getI2()].setBackground(Color.GRAY);
+                                        botones[tablero.getJ1()][tablero.getJ2()].setBackground(miSistema.partidaActual().getJugadorJugando().getFicha().getC());
+                                        botones[tablero.getI1()][tablero.getI2()].setIcon(null);
+                                        this.habilitarBotones(habilitado);
+                                        sinJugada.setSelected(true);
+                                        actualizarTablero(miSistema);
+                                        if (miSistema.partidaActual().partidaGanada(tablero.getJ1(), tablero.getJ2(), miSistema.partidaActual().getCantFichasInv())) {
+                                            miSistema.partidaActual().partidasJugadas(miSistema.partidaActual().getJugador1(), miSistema.partidaActual().getJugador2());
+                                            miSistema.partidaActual().partidasGanadas(miSistema.partidaActual().getJugadorEsperando(), miSistema.partidaActual().getJugadorJugando());
+                                            JOptionPane.showMessageDialog(null, "¡FELICIDADES " + miSistema.partidaActual().getJugadorJugando().getAlias() + " ERES EL GANADOR!");
+                                            menu.setEnabled(true);
+                                            tablero.dispose();
+                                        } else {
+                                            turno = !turno;
+                                            reseteo();
+                                            mover = false;
+                                        }
+                                    } catch (Exception ex) {
+                                        JOptionPane.showMessageDialog(null, ex.getMessage());
+                                        i1 = -1;
+                                        i2 = -1;
+                                        j1 = -1;
+                                        j2 = -1;
+                                        z1 = -1;
+                                        z2 = -1;
+                                        this.habilitarBotones(habilitado);
+                                    }
+                                } else {
+                                    mensaje = "No puede elegir una ficha del oponente";
+                                    error = true;
+                                    this.habilitarBotones(habilitado);
+                                }
+                            } else {
+                                mensaje = "Selecciono una baldosa vacia";
+                                error = true;
+                                this.habilitarBotones(habilitado);
+                            }
+                        } else {
+                            mensaje = "Seleccione una posicion con baldosa y ficha";
+                            error = true;
+                            this.habilitarBotones(habilitado);
+                        }
+                    } else {
+                        if (this.tablero.saltarFicha.isSelected()) {
+                            if (miSistema.partidaActual().getTablero().hayBaldosa(tablero.getI1(), tablero.getI2())) {
+                                if (miSistema.partidaActual().getTablero().hayFicha(tablero.getI1(), tablero.getI2())) {
+                                    Ficha ficha = miSistema.partidaActual().getTablero().getTableroFichas()[tablero.getI1()][tablero.getI2()];
+                                    if (miSistema.fichaCoincideConJugador(ficha)) {
+                                        miSistema.partidaActual().getJugadorJugando().setFicha(ficha);
+                                        try {
+                                            if (miSistema.saltaFicha(tablero.getI1(), tablero.getI2(), tablero.getJ1(), tablero.getJ2())) {
+                                                botones[tablero.getI1()][tablero.getI2()].setBackground(Color.GRAY);
+                                                botones[tablero.getI1()][tablero.getI2()].setIcon(null);
+                                                botones[tablero.getJ1()][tablero.getJ2()].setBackground(miSistema.partidaActual().getJugadorJugando().getFicha().getC());
+                                                actualizarTablero(miSistema);
+                                                this.habilitarBotones(habilitado);
+                                                sinJugada.setSelected(true);
+                                                valSaltoGanado = true;
+                                            } else {
+                                                mensaje = "Imposible saltar con esa ficha";
+                                                error = true;
+                                                this.habilitarBotones(habilitado);
+                                            }
+                                        } catch (Exception ex) {
+                                            JOptionPane.showMessageDialog(null, ex.getMessage());
+                                            i1 = -1;
+                                            i2 = -1;
+                                            j1 = -1;
+                                            j2 = -1;
+                                            z1 = -1;
+                                            z2 = -1;
+                                            valSaltoGanado = false;
+                                            this.habilitarBotones(habilitado);
+                                        }
+                                        if (valSaltoGanado) {
+                                            if (miSistema.partidaActual().getTablero().hayFicha(tablero.getJ1(), tablero.getJ2())) {
+                                                if (miSistema.partidaActual().partidaGanada(tablero.getJ1(), tablero.getJ2(), miSistema.partidaActual().getCantFichasInv())) {
+                                                    miSistema.partidaActual().partidasJugadas(miSistema.partidaActual().getJugador1(), miSistema.partidaActual().getJugador2());
+                                                    miSistema.partidaActual().partidasGanadas(miSistema.partidaActual().getJugadorEsperando(), miSistema.partidaActual().getJugadorJugando());
+                                                    JOptionPane.showMessageDialog(null, "¡FELICIDADES " + miSistema.partidaActual().getJugadorJugando().getAlias() + " ERES EL GANADOR!");
+                                                    menu.setEnabled(true);
+                                                    tablero.dispose();
+                                                } else {
+                                                    turno = !turno;
+                                                    reseteo();
+                                                    this.habilitarBotones(habilitado);
+                                                }
+                                            } else {
+                                                reseteo();
+                                                this.habilitarBotones(habilitado);
+                                            }
+                                        }
+                                    } else {
+                                        mensaje = "No puede elegir una ficha del oponente";
+                                        error = true;
+                                        this.habilitarBotones(habilitado);
+                                    }
+                                } else {
+                                    mensaje = "Seleccione una posicion con baldosa y ficha";
+                                    error = true;
+                                    this.habilitarBotones(habilitado);
+                                }
+                            } else {
+                                mensaje = "Seleccione una posicion con baldosa y ficha";
+                                error = true;
+                                this.habilitarBotones(habilitado);
+                            }
+                        } else {
+                            if (tablero.moverBaldosa.isSelected()) {
+                                if (miSistema.partidaActual().getTablero().hayBaldosa(tablero.getI1(), tablero.getI2())) {
+                                    if (miSistema.partidaActual().getTablero().hayFicha(tablero.getZ1(), tablero.getZ2())) {
+                                        Ficha ficha = miSistema.partidaActual().getTablero().getTableroFichas()[tablero.getZ1()][tablero.getZ2()];
+                                        if (miSistema.fichaCoincideConJugador(ficha)) {
+                                            miSistema.partidaActual().getJugadorJugando().setFicha(ficha);
+                                            try {
+                                                miSistema.moverBaldosa(tablero.getI1(), tablero.getI2(), tablero.getJ1(), tablero.getJ2(), tablero.getZ1(), tablero.getZ2(), miSistema.partidaActual().getJugadorJugando());
+                                                botones[tablero.getI1()][tablero.getI2()].setBackground(Color.YELLOW);
+                                                botones[tablero.getJ1()][tablero.getJ2()].setBackground(miSistema.partidaActual().getJugadorJugando().getFicha().getC());
+                                                botones[tablero.getZ1()][tablero.getZ2()].setBackground(Color.GRAY);
+                                                actualizarTablero(miSistema);
+                                                this.habilitarBotones(habilitado);
+                                                sinJugada.setSelected(true);
+                                                if (miSistema.partidaActual().getTablero().hayFicha(tablero.getJ1(), tablero.getJ2())) {
+                                                    if (miSistema.partidaActual().partidaGanada(tablero.getJ1(), tablero.getJ2(), miSistema.partidaActual().getCantFichasInv())) {
+                                                        miSistema.partidaActual().partidasJugadas(miSistema.partidaActual().getJugador1(), miSistema.partidaActual().getJugador2());
+                                                        miSistema.partidaActual().partidasGanadas(miSistema.partidaActual().getJugadorEsperando(), miSistema.partidaActual().getJugadorJugando());
+                                                        JOptionPane.showMessageDialog(null, "¡FELICIDADES " + miSistema.partidaActual().getJugadorJugando().getAlias() + " ERES EL GANADOR!");
+                                                        menu.setEnabled(true);
+                                                        tablero.dispose();
+                                                    } else {
+                                                        turno = !turno;
+                                                        reseteo();
+                                                        this.habilitarBotones(habilitado);
+                                                    }
+                                                } else {
+                                                    mensaje = "Error, vuelva a ingresar la jugada";
+                                                    error = true;
+                                                    this.habilitarBotones(habilitado);
+                                                }
+                                            } catch (Exception ex) {
+                                                JOptionPane.showMessageDialog(null, ex.getMessage());
+                                                i1 = -1;
+                                                i2 = -1;
+                                                j1 = -1;
+                                                j2 = -1;
+                                                z1 = -1;
+                                                z2 = -1;
+                                                this.habilitarBotones(habilitado);
+                                            }
+                                        } else {
+                                            mensaje = "No puede elegir una ficha del oponente";
+                                            error = true;
+                                            this.habilitarBotones(habilitado);
+                                        }
+                                    } else {
+                                        mensaje = "Seleccione una posicion con baldosa y ficha";
+                                        error = true;
+                                        this.habilitarBotones(habilitado);
+                                    }
+                                } else {
+                                    mensaje = "Seleccione una posicion con baldosa y ficha";
+                                    error = true;
+                                    this.habilitarBotones(habilitado);
+                                }
+                            }
+                        }
+                    }
+                }
+
+            } else {
+                mensaje = "No tiene seleccionado un movimiento";
+                error = true;
+            }
+            if (error) {
+                JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+                i1 = -1;
+                i2 = -1;
+                j1 = -1;
+                j2 = -1;
+                z1 = -1;
+                z2 = -1;
+            }
+        }
+
+        public void reseteo() {
+            i1 = -1;
+            i2 = -1;
+            j1 = -1;
+            j2 = -1;
+            z1 = -1;
+            z2 = -1;
+        }
+
+        public void habilitarBotones(boolean habilitado) {
+            moverFicha.setEnabled(habilitado);
+            saltarFicha.setEnabled(habilitado);
+            moverBaldosa.setEnabled(habilitado);
+            sinJugada.setEnabled(habilitado);
+        }
+    }
+
+    public void actualizarTablero(Sistema unS) {
+        int largo = unS.partidaActual().getTablero().getTableroFichas().length;
+        int ancho = unS.partidaActual().getTablero().getTableroFichas()[0].length;
+        for (int i = 0; i < largo; i++) {
+            for (int j = 0; j < ancho; j++) {
+                if (unS.partidaActual().getTablero().hayFicha(i, j)) {
+                    Ficha ficha1 = unS.partidaActual().getTablero().getTableroFichas()[i][j];
+                    if (ficha1.getLetra().contains("B") || ficha1.getLetra().contains("R")) {
+                        if (ficha1.getIcono() != null) {
+                            botones[i][j].setIcon(ficha1.getIcono());
+                            botones[i][j].setBackground(Color.WHITE);
+                        } else {
+                            if (ficha1.getLetra().contains("B")) {
+                                ficha1.setC(Color.WHITE);
+                                botones[i][j].setBackground(ficha1.getC());
+                            } else {
+                                if (ficha1.getLetra().contains("R")) {
+                                    ficha1.setC(Color.RED);
+                                    botones[i][j].setBackground(ficha1.getC());
+                                }
+                            }
+                        }
+                    }
+                    if (ficha1.getLetra().contains("b") || ficha1.getLetra().contains("r")) {
+                        if (ficha1.getIconoInvertido() != null) {
+                            botones[i][j].setIcon(ficha1.getIconoInvertido());
+                            botones[i][j].setBackground(Color.WHITE);
+                        } else {
+                            if (ficha1.getLetra().contains("b")) {
+                                ficha1.setC(Color.WHITE.darker());
+                                botones[i][j].setBackground(ficha1.getC());
+                            } else {
+                                if (ficha1.getLetra().contains("r")) {
+                                    ficha1.setC(Color.RED.darker());
+                                    botones[i][j].setBackground(ficha1.getC());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
